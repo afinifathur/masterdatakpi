@@ -9,6 +9,7 @@ class MdHeatNumber extends Model
     protected $table = 'md_heat_numbers';
 
     protected $fillable = [
+        'traveler_number',
         'kode_produksi',
         'heat_date',
         'item_code',

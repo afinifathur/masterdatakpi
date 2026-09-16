@@ -19,13 +19,17 @@ class MdHeatNumberController extends Controller
         }
 
         $results = MdHeatNumber::with('item.department')
-            ->where('heat_number', 'like', "%{$q}%")
+            ->where(function ($sub) use ($q) {
+                $sub->where('heat_number', 'like', "%{$q}%")
+                    ->orWhere('traveler_number', 'like', "%{$q}%");
+            })
             ->limit(15)
             ->get();
 
         return response()->json($results->map(function ($hn) {
             return [
                 'id' => $hn->id,
+                'traveler_number' => $hn->traveler_number,
                 'heat_number' => $hn->heat_number,
                 'item_name' => $hn->item_name,
                 'category' => $hn->item ? ($hn->item->department ? $hn->item->department->name : '-') : '-',
